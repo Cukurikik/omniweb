@@ -487,7 +487,7 @@ export default function AnimationLabPage() {
               style={{ borderColor: `${chip.color}25`, color: chip.color, background: `${chip.color}08` }}
               variants={{
                 hidden:  { opacity: 0, scale: 0.7 },
-                visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 300, damping: 20 } },
+                visible: { opacity: 1, scale: 1, transition: { type: "spring" as const, stiffness: 300, damping: 20 } },
               }}
               whileHover={{ scale: 1.08, background: `${chip.color}18` }}
               whileTap={{ scale: 0.93 }}
@@ -692,7 +692,7 @@ export default function AnimationLabPage() {
                 rotate: 8,
                 boxShadow: `0 0 32px ${C.cyan}50`,
                 background: `${C.cyan}25`,
-                transition: { type: "spring", stiffness: 300, damping: 18 },
+                transition: { type: "spring" as const, stiffness: 300, damping: 18 },
               }}
               aria-label="Hover demo"
             >

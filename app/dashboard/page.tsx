@@ -47,9 +47,9 @@ function StatCard({ label, value, suffix, color, icon, trend, delay }: {
   const ry  = useTransform(mx, [-0.5, 0.5], [-4, 4])
   const srx = useSpring(rx, { stiffness: 180, damping: 20 })
   const sry = useSpring(ry, { stiffness: 180, damping: 20 })
-  const gz  = useTransform([mx, my] as [typeof mx, typeof my],
-    ([lx, ly]: [number, number]) =>
-      `radial-gradient(circle at ${(lx+0.5)*100}% ${(ly+0.5)*100}%, ${color}08 0%, transparent 70%)`)
+  const gz  = useTransform([mx, my],
+    (input: number[]) =>
+      `radial-gradient(circle at ${(input[0]+0.5)*100}% ${(input[1]+0.5)*100}%, ${color}08 0%, transparent 70%)`)
 
   return (
     <motion.div

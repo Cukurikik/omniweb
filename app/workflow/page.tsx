@@ -191,7 +191,7 @@ export default function WorkflowPage() {
   const hc = { hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } } }
   const hi = {
     hidden:  { opacity: 0, y: 28, filter: "blur(10px)" },
-    visible: { opacity: 1, y: 0,  filter: "blur(0px)", transition: { type: "spring", stiffness: 300, damping: 24 } },
+    visible: { opacity: 1, y: 0,  filter: "blur(0px)", transition: { type: "spring" as const, stiffness: 300, damping: 24 } },
   }
 
   return (

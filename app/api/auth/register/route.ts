@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import {
-  getUserByEmail, createUser, hashPassword,
+  getUserByEmail, createUser,
   createSessionToken, SESSION_TTL, COOKIE_NAME,
 } from "@/lib/auth"
 
@@ -17,30 +17,30 @@ export async function POST(req: NextRequest) {
     const norm = email.toLowerCase().trim()
 
     /* ── duplicate check ── */
-    if (getUserByEmail(norm))
+    const existing = await getUserByEmail(norm)
+    if (existing)
       return NextResponse.json({ error: "An account with that email already exists." }, { status: 409 })
 
-    /* ── create user ── */
-    const hash = await hashPassword(password)
-    const user = createUser({
-      name:         name.trim(),
-      email:        norm,
-      passwordHash: hash,
-      plan:         "community",
+    /* ── create user (bcrypt hashing happens inside createUser) ── */
+    const user = await createUser({
+      name: name.trim(),
+      email: norm,
+      password,
+      plan: "community",
     })
 
-    /* ── create session — set cookie directly on response ── */
-    const token = createSessionToken(user)
+    /* ── create session ── */
+    const token = await createSessionToken(user)
     const res = NextResponse.json({
-      ok:   true,
-      user: { id: user.id, name: user.name, email: user.email, plan: user.plan, createdAt: user.createdAt },
+      ok: true,
+      user: { id: user.id, name: user.name, email: user.email, plan: user.plan, created_at: user.created_at },
     }, { status: 201 })
     res.cookies.set(COOKIE_NAME, token, {
-      httpOnly: false,          // must be false so middleware can read it in the preview runtime
-      secure:   process.env.NODE_ENV === "production",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge:   Math.floor(SESSION_TTL / 1000),
-      path:     "/",
+      maxAge: Math.floor(SESSION_TTL / 1000),
+      path: "/",
     })
     return res
 

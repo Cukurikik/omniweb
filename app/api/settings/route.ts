@@ -1,60 +1,62 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getSessionFromCookie } from "@/lib/auth"
-import { createServerClient } from "@/lib/supabase"
+import { getSessionFromCookie, getUserById } from "@/lib/auth"
 
 export async function GET() {
   const session = await getSessionFromCookie()
   if (!session) return NextResponse.json({ error: "Unauthenticated." }, { status: 401 })
 
-  const sb = createServerClient()
-  const { data, error } = await sb
-    .from("user_settings")
-    .select("*")
-    .eq("user_id", session.userId)
-    .maybeSingle()
+  const user = getUserById(session.userId)
+  if (!user) return NextResponse.json({ error: "User not found." }, { status: 404 })
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-
-  if (!data) {
-    const { data: created, error: createErr } = await sb
-      .from("user_settings")
-      .insert({ user_id: session.userId })
-      .select()
-      .single()
-
-    if (createErr) return NextResponse.json({ error: createErr.message }, { status: 500 })
-    return NextResponse.json({ settings: created })
-  }
-
-  return NextResponse.json({ settings: data })
+  return NextResponse.json({
+    profile: {
+      id:        user.id,
+      name:      user.name,
+      email:     user.email,
+      avatar:    user.avatar ?? null,
+      plan:      user.plan,
+      createdAt: user.createdAt,
+    },
+    preferences: {
+      theme:               "dark",
+      emailNotifications:  true,
+      buildAlerts:         true,
+      deployAlerts:        true,
+      securityAlerts:      true,
+      weeklyDigest:        false,
+      timezone:            "UTC",
+      defaultBranch:       "main",
+      autoDeployOnPush:    true,
+    },
+    security: {
+      mfaEnabled:      false,
+      activeSessions:  2,
+      lastPasswordChange: new Date(Date.now() - 30 * 86400000).toISOString(),
+    },
+    plan: {
+      current:     user.plan,
+      buildsUsed:  145,
+      buildsLimit: user.plan === "community" ? 200 : user.plan === "pro" ? 2000 : Infinity,
+      deploysUsed: 42,
+      deploysLimit: user.plan === "community" ? 50 : user.plan === "pro" ? 500 : Infinity,
+      renewsAt:    new Date(Date.now() + 15 * 86400000).toISOString(),
+    },
+  })
 }
 
 export async function PATCH(req: NextRequest) {
   const session = await getSessionFromCookie()
   if (!session) return NextResponse.json({ error: "Unauthenticated." }, { status: 401 })
 
+  const user = getUserById(session.userId)
+  if (!user) return NextResponse.json({ error: "User not found." }, { status: 404 })
+
   const body = await req.json()
-  const sb = createServerClient()
+  if (body.name)   user.name   = body.name.trim()
+  if (body.avatar) user.avatar = body.avatar
 
-  const { data, error } = await sb
-    .from("user_settings")
-    .update(body)
-    .eq("user_id", session.userId)
-    .select()
-    .maybeSingle()
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-
-  if (!data) {
-    const { data: created, error: createErr } = await sb
-      .from("user_settings")
-      .insert({ user_id: session.userId, ...body })
-      .select()
-      .single()
-
-    if (createErr) return NextResponse.json({ error: createErr.message }, { status: 500 })
-    return NextResponse.json({ ok: true, settings: created })
-  }
-
-  return NextResponse.json({ ok: true, settings: data })
+  return NextResponse.json({
+    ok: true,
+    user: { id: user.id, name: user.name, email: user.email, avatar: user.avatar, plan: user.plan },
+  })
 }

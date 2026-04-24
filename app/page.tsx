@@ -513,7 +513,7 @@ export default function HomePage() {
           ].map(({ lang, color }) => (
             <motion.span
               key={lang}
-              variants={{ hidden: { opacity: 0, scale: 0.75, y: 8 }, visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring" as const, stiffness: 280, damping: 20 } } }}
+              variants={{ hidden: { opacity: 0, scale: 0.75, y: 8 }, visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 280, damping: 20 } } }}
               className="inline-flex items-center gap-1.5 border text-[11px] px-3 py-1.5 rounded-full font-mono
                 hover:scale-110 transition-transform cursor-default"
               style={{ borderColor: `${color}25`, color: `${color}99`, background: `${color}08` }}

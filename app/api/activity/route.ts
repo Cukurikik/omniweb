@@ -1,32 +1,51 @@
 import { NextResponse } from "next/server"
 import { getSessionFromCookie } from "@/lib/auth"
+import { createServerClient } from "@/lib/supabase"
 
 export async function GET() {
   const session = await getSessionFromCookie()
-  const userId  = session?.userId ?? "usr_demo_0001"
-  const seed    = userId.charCodeAt(4) || 5
+  if (!session) return NextResponse.json({ error: "Unauthenticated." }, { status: 401 })
 
-  const activity = Array.from({ length: 30 }, (_, i) => ({
-    date:     new Date(Date.now() - (29 - i) * 86400000).toISOString().slice(0, 10),
-    builds:   Math.max(0, Math.round(seed * 0.4 + Math.sin(i * 0.7) * 8 + Math.random() * 6)),
-    deploys:  Math.max(0, Math.round(seed * 0.12 + Math.sin(i * 0.5) * 3 + Math.random() * 2)),
-    errors:   Math.max(0, Math.round(Math.random() * 2)),
-    duration: Math.round(800 + Math.sin(i * 0.9) * 400 + Math.random() * 800),
-  }))
+  const sb = createServerClient()
+  const since = new Date(Date.now() - 30 * 86400000).toISOString()
 
-  const langs = [
-    { lang: "Rust",       pct: 31, color: "#ef4444" },
-    { lang: "Go",         pct: 24, color: "#00d4ff" },
-    { lang: "TypeScript", pct: 20, color: "#3178c6" },
-    { lang: "Python",     pct: 15, color: "#f59e0b" },
-    { lang: "Julia",      pct: 6,  color: "#a855f7" },
-    { lang: "C++",        pct: 4,  color: "#00ff88" },
-  ]
+  const { data, error } = await sb
+    .from("build_history")
+    .select("created_at, status, duration, language")
+    .eq("user_id", session.userId)
+    .gte("created_at", since)
+    .order("created_at", { ascending: true })
 
-  const hourly = Array.from({ length: 24 }, (_, h) => ({
-    hour: h,
-    builds: Math.max(0, Math.round(Math.sin((h - 6) * Math.PI / 12) * 12 + Math.random() * 4)),
-  }))
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  return NextResponse.json({ activity, langs, hourly })
+  const rows = data ?? []
+
+  const byDay = new Map<string, { builds: number; deploys: number; errors: number; duration: number }>()
+  for (const r of rows) {
+    const day = String(r.created_at).slice(0, 10)
+    const entry = byDay.get(day) ?? { builds: 0, deploys: 0, errors: 0, duration: 0 }
+    entry.builds++
+    if (r.status === "success") entry.deploys++
+    if (r.status === "failed") entry.errors++
+    entry.duration += Number(r.duration ?? 0)
+    byDay.set(day, entry)
+  }
+
+  const activity = Array.from(byDay.entries()).map(([date, e]) => ({ date, ...e }))
+
+  const langMap = new Map<string, number>()
+  for (const r of rows) {
+    const l = String(r.language ?? "Unknown").split("+")[0].trim()
+    langMap.set(l, (langMap.get(l) ?? 0) + 1)
+  }
+  const total = rows.length || 1
+  const langColors: Record<string, string> = {
+    Rust: "#ef4444", Go: "#00d4ff", Python: "#f59e0b",
+    TypeScript: "#3178c6", Julia: "#a855f7", "C++": "#00ff88",
+  }
+  const langs = Array.from(langMap.entries())
+    .map(([lang, count]) => ({ lang, pct: Math.round((count / total) * 100), color: langColors[lang] ?? "#94a3b8" }))
+    .sort((a, b) => b.pct - a.pct)
+
+  return NextResponse.json({ activity, langs })
 }

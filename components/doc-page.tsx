@@ -182,7 +182,7 @@ function CodeBlock({ code, lang }: { code: string; lang?: string }) {
 
 // ─── Section renderer with animations ─────────────────────────────────────────
 function Section({ s, index }: { s: DocSection; index: number }) {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<any>(null)
   const inView = useInView(ref, { once: true, margin: "-20px 0px" })
 
   switch (s.type) {

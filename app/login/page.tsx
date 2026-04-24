@@ -9,8 +9,6 @@ import { OmniLogo } from "@/components/omni-nav"
 
 /* ─────────────────────────────────────────────────────── constants */
 const sp = { type: "spring", stiffness: 340, damping: 26 } as const
-const DEMO_EMAIL = "demo@omni.dev"
-const DEMO_PASS  = "omni2025"
 
 /* ─────────────────────────────────────────────────────── particle canvas */
 function ParticleCanvas() {
@@ -107,8 +105,8 @@ function useTilt(str = 10) {
   const srx = useSpring(rx, { stiffness: 160, damping: 20 })
   const sry = useSpring(ry, { stiffness: 160, damping: 20 })
   const gz  = useTransform(
-    [mx, my] as [typeof mx, typeof my],
-    ([lx, ly]: [number, number]) => `radial-gradient(circle at ${(lx + 0.5) * 100}% ${(ly + 0.5) * 100}%, rgba(0,212,255,0.07) 0%, transparent 70%)`
+    [mx, my],
+    (input: number[]) => `radial-gradient(circle at ${(input[0] + 0.5) * 100}% ${(input[1] + 0.5) * 100}%, rgba(0,212,255,0.07) 0%, transparent 70%)`
   )
   const move = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return
@@ -125,15 +123,15 @@ const ctnr = { hidden: {}, visible: { transition: { staggerChildren: 0.065, dela
 const itm  = {
   hidden:  { opacity: 0, y: 22, filter: "blur(10px)" },
   visible: { opacity: 1, y: 0,  filter: "blur(0px)",
-    transition: { type: "spring", stiffness: 280, damping: 24 } },
+    transition: { type: "spring" as const, stiffness: 280, damping: 24 } },
 }
 
 /* ─────────────────────────────────────────────────────── social button */
 function SocialBtn({ icon, label, color }: { icon: React.ReactNode; label: string; color?: string }) {
   const mx = useMotionValue(0); const my = useMotionValue(0)
-  const bg = useTransform([mx, my] as [typeof mx, typeof my],
-    ([lx, ly]: [number, number]) =>
-      `radial-gradient(circle at ${(lx + 0.5) * 100}% ${(ly + 0.5) * 100}%, rgba(255,255,255,0.05) 0%, transparent 80%)`)
+  const bg = useTransform([mx, my],
+    (input: number[]) =>
+      `radial-gradient(circle at ${(input[0] + 0.5) * 100}% ${(input[1] + 0.5) * 100}%, rgba(255,255,255,0.05) 0%, transparent 80%)`)
   return (
     <motion.button
       type="button"
@@ -267,10 +265,6 @@ export default function LoginPage() {
       if (!res.ok) {
         setError(data.error ?? "Sign in failed. Please try again.")
       } else {
-        /* Persist session to localStorage as fallback for the dashboard layout */
-        if (typeof window !== "undefined") {
-          localStorage.setItem("omni_user", JSON.stringify(data.user))
-        }
         setSuccess(true)
         await new Promise(r => setTimeout(r, 900))
         window.location.replace("/dashboard")
@@ -407,7 +401,7 @@ export default function LoginPage() {
                 className="px-3 py-1.5 rounded-full text-[11px] font-mono border border-white/[0.07] text-[#475569] hover:text-[#00d4ff] hover:border-[#00d4ff]/30 transition-colors cursor-default"
                 variants={{
                   hidden:  { opacity: 0, scale: 0.65, y: 10 },
-                  visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 320, damping: 22 } },
+                  visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring" as const, stiffness: 320, damping: 22 } },
                 }}
               >
                 {f}
@@ -803,14 +797,6 @@ export default function LoginPage() {
                     </form>
                   </div>
                 </motion.div>
-
-                {/* demo hint */}
-                <motion.p
-                  variants={itm}
-                  className="text-center text-[10px] font-mono text-[#1e293b] mt-5"
-                >
-                  Demo: <span className="text-[#334155]">demo@omni.dev</span> / <span className="text-[#334155]">omni2025</span>
-                </motion.p>
 
               </motion.div>
             )}

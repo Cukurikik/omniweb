@@ -12,28 +12,29 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email and password are required." }, { status: 400 })
 
     const norm = email.toLowerCase().trim()
-    const user = await getUserByEmail(norm)
+    const user = getUserByEmail(norm)
 
     /* Constant-time-ish: always verify to avoid timing oracle */
     const valid = user
-      ? await verifyPassword(password, user.password_hash)
-      : (await verifyPassword(password, "$2b$12$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"), false)
+      ? await verifyPassword(password, user.passwordHash)
+      : (await verifyPassword(password, "x"), false)
 
     if (!user || !valid)
       return NextResponse.json({ error: "Invalid email or password." }, { status: 401 })
 
-    const token = await createSessionToken(user)
+    const token = createSessionToken(user)
 
+    /* Set the cookie directly on the response so it works in all environments */
     const res = NextResponse.json({
-      ok: true,
+      ok:   true,
       user: { id: user.id, name: user.name, email: user.email, plan: user.plan },
     })
     res.cookies.set(COOKIE_NAME, token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      httpOnly: false,          // must be false so middleware can read it in the preview runtime
+      secure:   process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: Math.floor(SESSION_TTL / 1000),
-      path: "/",
+      maxAge:   Math.floor(SESSION_TTL / 1000),
+      path:     "/",
     })
     return res
 

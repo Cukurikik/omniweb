@@ -78,9 +78,9 @@ function useTilt(str = 9) {
   const ry  = useTransform(mx, [-0.5, 0.5], [-str,  str])
   const srx = useSpring(rx, { stiffness: 160, damping: 20 })
   const sry = useSpring(ry, { stiffness: 160, damping: 20 })
-  const gz  = useTransform([mx, my],
-    (input: number[]) =>
-      `radial-gradient(circle at ${(input[0] + 0.5) * 100}% ${(input[1] + 0.5) * 100}%, rgba(0,255,136,0.06) 0%, transparent 70%)`)
+  const gz  = useTransform([mx, my] as [typeof mx, typeof my],
+    ([lx, ly]: [number, number]) =>
+      `radial-gradient(circle at ${(lx + 0.5) * 100}% ${(ly + 0.5) * 100}%, rgba(0,255,136,0.06) 0%, transparent 70%)`)
   const move  = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return
     const r = ref.current.getBoundingClientRect()
@@ -95,7 +95,7 @@ function useTilt(str = 9) {
 const ctnr = { hidden: {}, visible: { transition: { staggerChildren: 0.065, delayChildren: 0.1 } } }
 const itm  = {
   hidden:  { opacity: 0, y: 20, filter: "blur(10px)" },
-  visible: { opacity: 1, y: 0,  filter: "blur(0px)", transition: { type: "spring" as const, stiffness: 280, damping: 24 } },
+  visible: { opacity: 1, y: 0,  filter: "blur(0px)", transition: { type: "spring", stiffness: 280, damping: 24 } },
 }
 
 /* ─── step indicator ────────────────────────────────────── */
@@ -307,6 +307,9 @@ export default function RegisterPage() {
       if (!res.ok) {
         setError(data.error ?? "Registration failed. Please try again.")
       } else {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("omni_user", JSON.stringify(data.user))
+        }
         setSuccess(true)
         await new Promise(r => setTimeout(r, 1200))
         window.location.replace("/dashboard")
@@ -447,7 +450,7 @@ export default function RegisterPage() {
             ].map(f => (
               <motion.div key={f.text}
                 className="flex items-start gap-3 text-sm"
-                variants={{ hidden: { opacity: 0, x: -18 }, visible: { opacity: 1, x: 0, transition: { type: "spring" as const, stiffness: 280, damping: 24 } } }}>
+                variants={{ hidden: { opacity: 0, x: -18 }, visible: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 280, damping: 24 } } }}>
                 <motion.span
                   className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-black flex-shrink-0 mt-0.5"
                   style={{ background: `${f.color}14`, color: f.color, border: `1px solid ${f.color}22` }}

@@ -48,7 +48,7 @@ export const variants = {
   },
   scalePop: {
     hidden:  { opacity: 0, scale: 0.78 },
-    visible: { opacity: 1, scale: 1, transition: { type: "spring" as const, stiffness: 300, damping: 22 } },
+    visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 300, damping: 22 } },
   },
   blurRise: {
     hidden:  { opacity: 0, filter: "blur(12px)", y: 20 },
@@ -408,7 +408,7 @@ export function VelocityMarquee({ items, baseSpeed = 3, className, itemClassName
 
   const x = useMotionValue(0)
   const dirFactor = useRef(1)
-  const rafRef    = useRef<number | undefined>(undefined)
+  const rafRef    = useRef<number>()
 
   useEffect(() => {
     let lastTime: number | null = null
@@ -2055,7 +2055,7 @@ export function SkewCard({ children, className }: { children: ReactNode; classNa
         skewY: 2,
         rotate: -2,
         scale: 1.04,
-        transition: { type: "spring" as const, stiffness: 300, damping: 18 },
+        transition: { type: "spring", stiffness: 300, damping: 18 },
       }}
       whileTap={{ skewX: 3, skewY: -1, scale: 0.97 }}
       animate={{ skewX: 0, skewY: 0, rotate: 0 }}
@@ -2177,7 +2177,7 @@ export function FocusInput({
           scale: 1.02,
           borderColor: "#00d4ff",
           boxShadow: "0 0 0 3px rgba(0,212,255,0.15), 0 0 20px rgba(0,212,255,0.1)",
-          transition: { type: "spring" as const, stiffness: 400, damping: 25 },
+          transition: { type: "spring", stiffness: 400, damping: 25 },
         }}
       />
     </div>
@@ -2199,7 +2199,7 @@ export function DynamicVariantGrid({ items, className }: { items: DynamicVariant
       scale: 1,
       rotate: 0,
       transition: {
-        type:      "spring" as const,
+        type:      "spring",
         stiffness: 280,
         damping:   18,
         delay:     item.delay,
@@ -2221,7 +2221,7 @@ export function DynamicVariantGrid({ items, className }: { items: DynamicVariant
           variants={itemVariants}
           className="px-4 py-2 rounded-xl text-xs font-semibold font-mono"
           style={{ background: `${item.color}15`, color: item.color, border: `1px solid ${item.color}25` }}
-          whileHover={{ scale: 1.1, rotate: 3, transition: { type: "spring" as const, stiffness: 400, damping: 18 } }}
+          whileHover={{ scale: 1.1, rotate: 3, transition: { type: "spring", stiffness: 400, damping: 18 } }}
           whileTap={{ scale: 0.92 }}
         >
           {item.label}
@@ -2432,7 +2432,7 @@ export function OrchestratedStagger({ items, className }: { items: OrchestratedI
       scale:   1,
       rotate:  0,
       transition: {
-        type:      "spring" as const,
+        type:      "spring",
         stiffness: 300,
         damping:   20,
       },
@@ -2457,7 +2457,7 @@ export function OrchestratedStagger({ items, className }: { items: OrchestratedI
             y: -4,
             scale: 1.06,
             boxShadow: `0 8px 20px ${i.color}30`,
-            transition: { type: "spring" as const, stiffness: 400, damping: 18 },
+            transition: { type: "spring", stiffness: 400, damping: 18 },
           }}
         >
           <span aria-hidden="true">{i.icon}</span>

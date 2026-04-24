@@ -7,7 +7,7 @@ import { motion, useInView, useScroll, useTransform, AnimatePresence } from "mot
    ANIMATION VARIANTS
 ───────────────────────────────────────────────────────────── */
 const container = { hidden: {}, visible: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } } }
-const fadeUp    = { hidden: { opacity: 0, y: 20, scale: 0.97 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring" as const, stiffness: 300, damping: 22 } } }
+const fadeUp    = { hidden: { opacity: 0, y: 20, scale: 0.97 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 300, damping: 22 } } }
 
 /* ─────────────────────────────────────────────────────────────
    DATA

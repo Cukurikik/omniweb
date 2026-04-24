@@ -807,20 +807,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [showLogout,   setShowLogout]   = useState(false)
   const [logoutBusy,   setLogoutBusy]   = useState(false)
 
-  /* Auth bootstrap from session cookie */
+  /* Auth bootstrap from localStorage */
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then(r => {
-        if (!r.ok) throw new Error("Not authenticated")
-        return r.json()
-      })
-      .then(d => {
-        setUser(d.user)
+    const raw = typeof window !== "undefined" ? localStorage.getItem("omni_user") : null
+    if (raw) {
+      try {
+        setUser(JSON.parse(raw))
         setLoading(false)
-      })
-      .catch(() => {
+      } catch {
+        localStorage.removeItem("omni_user")
         router.replace("/login")
-      })
+        return
+      }
+    } else {
+      router.replace("/login")
+      return
+    }
 
     fetch("/api/notifications")
       .then(r => r.ok ? r.json() : null)
@@ -834,6 +836,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   async function handleLogout() {
     setLogoutBusy(true)
     try {
+      if (typeof window !== "undefined") localStorage.removeItem("omni_user")
       await fetch("/api/auth/logout", { method: "POST" }).catch(() => {})
     } finally {
       setLogoutBusy(false)

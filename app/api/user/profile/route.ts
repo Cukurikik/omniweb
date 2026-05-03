@@ -24,7 +24,7 @@ export async function PATCH(req: NextRequest) {
 
   for (const key of allowedKeys) {
     if (body[key] !== undefined) {
-      (user as Record<string, unknown>)[key] = body[key]
+      (user as unknown as Record<string, unknown>)[key] = body[key]
     }
   }
 

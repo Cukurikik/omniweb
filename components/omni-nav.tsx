@@ -216,12 +216,12 @@ export default function OmniNav() {
             initial="closed"
             animate="open"
             exit="closed"
-            variants={menuVariants}
+            variants={menuVariants as any}
             className="md:hidden overflow-hidden"
           >
             <div className="bg-[#0d1117]/98 backdrop-blur-xl border-t border-white/[0.06] px-4 py-4 flex flex-col gap-1">
               {NAV_LINKS.map((l, i) => (
-                <motion.div key={l.href} custom={i} variants={itemVariants}>
+                <motion.div key={l.href} custom={i} variants={itemVariants as any}>
                   <Link
                     href={l.href}
                     onClick={() => setOpen(false)}
@@ -237,7 +237,7 @@ export default function OmniNav() {
               ))}
               <motion.div
                 custom={NAV_LINKS.length}
-                variants={itemVariants}
+                variants={itemVariants as any}
                 className="mt-3 pt-3 border-t border-white/[0.06] flex flex-col gap-2"
               >
                 <Link href="/login" onClick={() => setOpen(false)}

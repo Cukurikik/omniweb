@@ -250,12 +250,12 @@ export default function PackagesPage() {
           <motion.div
             ref={heroRef}
             className="text-center mb-14"
-            variants={stagger}
+            variants={stagger as any}
             initial="hidden"
             animate={heroInView ? "visible" : "hidden"}
           >
             <motion.div
-              variants={child}
+              variants={child as any}
               className="inline-flex items-center gap-2 text-xs text-[#00d4ff] font-mono bg-[#00d4ff]/10 border border-[#00d4ff]/20 rounded-full px-4 py-1.5 mb-6"
             >
               <motion.span
@@ -267,7 +267,7 @@ export default function PackagesPage() {
               OMNI-NEXUS Registry
             </motion.div>
 
-            <motion.h1 variants={child} className="text-4xl md:text-5xl font-black text-[#e2e8f0] mb-4">
+            <motion.h1 variants={child as any} className="text-4xl md:text-5xl font-black text-[#e2e8f0] mb-4">
               <motion.span
                 className="gradient-text"
                 animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
@@ -279,7 +279,7 @@ export default function PackagesPage() {
               <span className="text-[#e2e8f0]">One registry.</span>
             </motion.h1>
 
-            <motion.p variants={child} className="text-[#64748b] max-w-lg mx-auto">
+            <motion.p variants={child as any} className="text-[#64748b] max-w-lg mx-auto">
               Replace npm, Cargo, PyPI, Maven, and RubyGems with OMNI-NEXUS.
               All packages resolve together without version conflicts.
             </motion.p>

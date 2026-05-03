@@ -78,7 +78,7 @@ function useTilt(str = 9) {
   const ry  = useTransform(mx, [-0.5, 0.5], [-str,  str])
   const srx = useSpring(rx, { stiffness: 160, damping: 20 })
   const sry = useSpring(ry, { stiffness: 160, damping: 20 })
-  const gz  = useTransform([mx, my] as [typeof mx, typeof my],
+  const gz  = useTransform([mx, my] as any,
     ([lx, ly]: [number, number]) =>
       `radial-gradient(circle at ${(lx + 0.5) * 100}% ${(ly + 0.5) * 100}%, rgba(0,255,136,0.06) 0%, transparent 70%)`)
   const move  = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -496,10 +496,10 @@ export default function RegisterPage() {
                 <SuccessScreen name={form.name.split(" ")[0] || "Developer"} />
               </motion.div>
             ) : (
-              <motion.div key="form" variants={ctnr} initial="hidden" animate="visible">
+              <motion.div key="form" variants={ctnr as any} initial="hidden" animate="visible">
 
                 {/* back */}
-                <motion.div variants={itm} className="mb-8">
+                <motion.div variants={itm as any} className="mb-8">
                   <Link href="/" className="inline-flex items-center gap-2 group" aria-label="Back to home">
                     <motion.div
                       className="w-8 h-8 rounded-lg flex items-center justify-center border border-white/[0.07]"
@@ -518,7 +518,7 @@ export default function RegisterPage() {
                 </motion.div>
 
                 {/* header */}
-                <motion.div variants={itm} className="mb-7">
+                <motion.div variants={itm as any} className="mb-7">
                   <h1 className="text-[1.75rem] font-black text-[#e2e8f0] mb-1.5 tracking-tight">
                     Create account
                   </h1>
@@ -531,14 +531,14 @@ export default function RegisterPage() {
                 </motion.div>
 
                 {/* step bar */}
-                <motion.div variants={itm}>
+                <motion.div variants={itm as any}>
                   <StepBar steps={["Info", "Password", "Confirm"]} current={step} />
                 </motion.div>
 
                 {/* 3D tilt glass card */}
                 <motion.div
                   ref={tilt.ref}
-                  variants={itm}
+                  variants={itm as any}
                   onMouseMove={tilt.move}
                   onMouseLeave={tilt.leave}
                   style={{ rotateX: tilt.srx, rotateY: tilt.sry, transformStyle: "preserve-3d" }}

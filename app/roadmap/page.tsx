@@ -282,11 +282,11 @@ export default function RoadmapPage() {
           ))}
         </motion.div>
 
-        <motion.div className="max-w-3xl mx-auto relative z-10" variants={hc} initial="hidden" animate="visible">
-          <motion.p variants={hi} className="text-xs text-[#00d4ff] font-mono uppercase tracking-widest mb-4">
+        <motion.div className="max-w-3xl mx-auto relative z-10" variants={hc as any} initial="hidden" animate="visible">
+          <motion.p variants={hi as any} className="text-xs text-[#00d4ff] font-mono uppercase tracking-widest mb-4">
             Evolution
           </motion.p>
-          <motion.h1 className="text-5xl md:text-6xl font-black text-[#e2e8f0] mb-4 leading-tight" variants={hi}>
+          <motion.h1 className="text-5xl md:text-6xl font-black text-[#e2e8f0] mb-4 leading-tight" variants={hi as any}>
             {"OMNI Roadmap".split("").map((ch, i) => (
               <motion.span key={i} className="inline-block"
                 initial={{ opacity: 0, y: 20, rotate: -4 }}
@@ -296,16 +296,16 @@ export default function RoadmapPage() {
               </motion.span>
             ))}
           </motion.h1>
-          <motion.p variants={hi} className="text-[#64748b] text-lg mb-4">
+          <motion.p variants={hi as any} className="text-[#64748b] text-lg mb-4">
             The .omni programming language evolution
           </motion.p>
-          <motion.p variants={hi} className="text-[#475569] max-w-xl mx-auto leading-relaxed">
+          <motion.p variants={hi as any} className="text-[#475569] max-w-xl mx-auto leading-relaxed">
             OMNI is on a mission to unify all programming into a single, safe, performant runtime.
             Here&apos;s what&apos;s been built and what&apos;s coming next.
           </motion.p>
 
           {/* Status legend */}
-          <motion.div variants={hi} className="flex flex-wrap justify-center gap-4 mt-10">
+          <motion.div variants={hi as any} className="flex flex-wrap justify-center gap-4 mt-10">
             {[
               { label: "Released",    color: "#00ff88" },
               { label: "In Progress", color: "#00d4ff" },

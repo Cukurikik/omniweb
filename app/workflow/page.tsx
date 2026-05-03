@@ -229,13 +229,13 @@ export default function WorkflowPage() {
 
         <motion.div
           className="max-w-3xl mx-auto relative z-10"
-          variants={hc} initial="hidden" animate="visible"
+          variants={hc as any} initial="hidden" animate="visible"
         >
-          <motion.p variants={hi} className="text-xs text-[#00d4ff] font-mono uppercase tracking-widest mb-4">
+          <motion.p variants={hi as any} className="text-xs text-[#00d4ff] font-mono uppercase tracking-widest mb-4">
             Compilation Pipeline
           </motion.p>
 
-          <motion.h1 className="text-5xl md:text-7xl font-black text-[#e2e8f0] mb-5 leading-[1.05]" variants={hi}>
+          <motion.h1 className="text-5xl md:text-7xl font-black text-[#e2e8f0] mb-5 leading-[1.05]" variants={hi as any}>
             {"The OMNI".split("").map((ch, i) => (
               <motion.span key={i} className="inline-block"
                 initial={{ opacity: 0, y: 20 }}
@@ -255,14 +255,14 @@ export default function WorkflowPage() {
             </motion.span>
           </motion.h1>
 
-          <motion.p variants={hi} className="text-[#64748b] text-lg mb-3 leading-relaxed">
+          <motion.p variants={hi as any} className="text-[#64748b] text-lg mb-3 leading-relaxed">
             6-step pipeline. Zero-copy bridges. One binary.
           </motion.p>
-          <motion.p variants={hi} className="text-[#475569] max-w-xl mx-auto leading-relaxed text-sm mb-10">
+          <motion.p variants={hi as any} className="text-[#475569] max-w-xl mx-auto leading-relaxed text-sm mb-10">
             Click any step below to inspect compiler output in real time, or run the interactive walkthrough.
           </motion.p>
 
-          <motion.div variants={hi} className="flex flex-wrap gap-4 justify-center">
+          <motion.div variants={hi as any} className="flex flex-wrap gap-4 justify-center">
             <motion.button
               onClick={startTour}
               className="group relative overflow-hidden bg-[#00d4ff] text-[#080b12] font-bold px-8 py-3.5 rounded-xl text-sm flex items-center gap-2"

@@ -667,15 +667,15 @@ export default function DocsIntroPage() {
     <div className="omni-prose">
 
       {/* ── HERO ── */}
-      <motion.div ref={heroRef} className="mb-12" initial="hidden" animate={heroInView ? "visible" : "hidden"} variants={container}>
-        <motion.div variants={fadeUp} style={{ opacity: badgeOpacity }}
+      <motion.div ref={heroRef} className="mb-12" initial="hidden" animate={heroInView ? "visible" : "hidden"} variants={container as any}>
+        <motion.div variants={fadeUp as any} style={{ opacity: badgeOpacity }}
           className="inline-flex items-center gap-2 text-xs text-[#00d4ff] font-mono bg-[#00d4ff]/10 border border-[#00d4ff]/20 rounded-full px-3 py-1 mb-5">
           <motion.span className="w-1.5 h-1.5 rounded-full bg-[#00d4ff]"
             animate={{ scale: [1,1.5,1], opacity: [1,0.4,1] }} transition={{ duration: 2, repeat: Infinity }} aria-hidden="true" />
           Documentation — Introduction
         </motion.div>
 
-        <motion.h1 variants={fadeUp} className="text-3xl md:text-4xl lg:text-5xl font-black text-[#e2e8f0] mb-5 leading-tight text-balance">
+        <motion.h1 variants={fadeUp as any} className="text-3xl md:text-4xl lg:text-5xl font-black text-[#e2e8f0] mb-5 leading-tight text-balance">
           What is{" "}
           <motion.span className="gradient-text"
             animate={{ backgroundPosition: ["0% 50%","100% 50%","0% 50%"] }}
@@ -685,7 +685,7 @@ export default function DocsIntroPage() {
           </motion.span>
         </motion.h1>
 
-        <motion.p variants={fadeUp} className="text-[#64748b] leading-relaxed text-lg max-w-3xl">
+        <motion.p variants={fadeUp as any} className="text-[#64748b] leading-relaxed text-lg max-w-3xl">
           OMNI is the world&apos;s first polylingual runtime — unifying{" "}
           <strong className="text-[#e2e8f0]">15 programming languages</strong> into a single binary powered by{" "}
           <span className="text-[#00d4ff] font-semibold">LLVM-Omni</span>.
@@ -694,7 +694,7 @@ export default function DocsIntroPage() {
         </motion.p>
 
         {/* Metrics strip */}
-        <motion.div variants={fadeUp} className="grid grid-cols-3 md:grid-cols-6 gap-3 mt-8 not-prose">
+        <motion.div variants={fadeUp as any} className="grid grid-cols-3 md:grid-cols-6 gap-3 mt-8 not-prose">
           {METRICS.map((m, i) => (
             <motion.div key={m.label}
               className="flex flex-col items-center p-4 rounded-xl border border-white/[0.07] bg-[#0d1117] text-center"
@@ -719,14 +719,14 @@ export default function DocsIntroPage() {
         Modern software development is held back by fragmentation. Teams fight language wars, microservice architectures create
         cascading failures, and every language ecosystem demands its own toolchain, package manager, and runtime. The cost is real:
       </motion.p>
-      <motion.ul variants={container} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-20px 0px" }}>
+      <motion.ul variants={container as any} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-20px 0px" }}>
         {[
           "Rust for the backend, Python for ML, TypeScript for UI — three runtimes, three build systems, three deployment pipelines",
           "gRPC, Protobuf, and JSON serialization waste CPU cycles crossing language boundaries",
           "npm, pip, cargo, go mod — each ecosystem is an island with no bridge to the others",
           "Microservice spaghetti: 47 services, 47 CI/CD pipelines, 47 points of failure",
           "Cold-start latency: 2–4 seconds for Node.js containers; milliseconds lost forever",
-        ].map(t => <motion.li key={t} variants={fadeUp}>{t}</motion.li>)}
+        ].map(t => <motion.li key={t} variants={fadeUp as any}>{t}</motion.li>)}
       </motion.ul>
 
       {/* ── SOLUTION TABLE ── */}

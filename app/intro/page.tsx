@@ -157,16 +157,16 @@ export default function IntroPage() {
 
         <motion.div
           className="max-w-3xl mx-auto relative z-10"
-          variants={heroContainer}
+          variants={heroContainer as any}
           initial="hidden"
           animate="visible"
         >
-          <motion.p variants={heroItem} className="text-xs text-[#00d4ff] font-mono uppercase tracking-widest mb-4">
+          <motion.p variants={heroItem as any} className="text-xs text-[#00d4ff] font-mono uppercase tracking-widest mb-4">
             Introduction
           </motion.p>
 
           {/* Split text headline */}
-          <motion.h1 className="text-5xl md:text-6xl font-black text-[#e2e8f0] mb-4 leading-tight" variants={heroItem}>
+          <motion.h1 className="text-5xl md:text-6xl font-black text-[#e2e8f0] mb-4 leading-tight" variants={heroItem as any}>
             {"What is OMNI?".split("").map((ch, i) => (
               <motion.span
                 key={i}
@@ -180,13 +180,13 @@ export default function IntroPage() {
             ))}
           </motion.h1>
 
-          <motion.p variants={heroItem} className="text-[#64748b] text-lg mb-12">
+          <motion.p variants={heroItem as any} className="text-[#64748b] text-lg mb-12">
             A comprehensive introduction to the framework and language
           </motion.p>
 
           {/* Intro text card */}
           <motion.div
-            variants={heroItem}
+            variants={heroItem as any}
             className="text-left bg-[#0d1117] border border-white/[0.07] rounded-2xl p-7 mb-10"
             whileHover={{ borderColor: "rgba(0,212,255,0.2)", boxShadow: "0 0 30px rgba(0,212,255,0.06)" }}
             transition={{ duration: 0.3 }}
@@ -210,7 +210,7 @@ export default function IntroPage() {
 
           {/* Stats */}
           <motion.div
-            variants={heroItem}
+            variants={heroItem as any}
             className="grid grid-cols-2 sm:grid-cols-5 gap-px bg-white/[0.05] rounded-2xl overflow-hidden border border-white/[0.06]"
           >
             {STATS.map((s, i) => (

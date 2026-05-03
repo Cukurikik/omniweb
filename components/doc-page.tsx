@@ -29,7 +29,7 @@ function CodeBlock({ code, lang }: { code: string; lang?: string }) {
 
   return (
     <motion.div
-      ref={ref}
+      ref={ref as any}
       className="relative my-5 rounded-xl border border-white/[0.08] bg-[#0a0d14] overflow-hidden group"
       initial={{ opacity: 0, y: 20, scale: 0.98 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
@@ -189,7 +189,7 @@ function Section({ s, index }: { s: DocSection; index: number }) {
     case "h2":
       return (
         <motion.h2
-          ref={ref}
+          ref={ref as any}
           className="text-xl font-bold text-[#e2e8f0] mt-10 mb-3 flex items-center gap-2 scroll-mt-20 relative group"
           initial={{ opacity: 0, x: -12 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -209,7 +209,7 @@ function Section({ s, index }: { s: DocSection; index: number }) {
     case "h3":
       return (
         <motion.h3
-          ref={ref}
+          ref={ref as any}
           className="text-lg font-semibold text-[#cbd5e1] mt-7 mb-2"
           initial={{ opacity: 0, x: -8 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -221,7 +221,7 @@ function Section({ s, index }: { s: DocSection; index: number }) {
     case "p":
       return (
         <motion.p
-          ref={ref}
+          ref={ref as any}
           className="text-[#94a3b8] leading-relaxed mb-4"
           initial={{ opacity: 0, y: 8 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -235,7 +235,7 @@ function Section({ s, index }: { s: DocSection; index: number }) {
     case "ul":
       return (
         <motion.ul
-          ref={ref}
+          ref={ref as any}
           className="my-4 space-y-1.5 pl-4"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -264,7 +264,7 @@ function Section({ s, index }: { s: DocSection; index: number }) {
     case "ol":
       return (
         <motion.ol
-          ref={ref}
+          ref={ref as any}
           className="my-4 space-y-2 pl-4 list-none"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -293,7 +293,7 @@ function Section({ s, index }: { s: DocSection; index: number }) {
     case "table":
       return (
         <motion.div
-          ref={ref}
+          ref={ref as any}
           className="rounded-xl border border-white/[0.07] overflow-x-auto my-5 relative group"
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -344,7 +344,7 @@ function Section({ s, index }: { s: DocSection; index: number }) {
     case "callout":
       return (
         <motion.div
-          ref={ref}
+          ref={ref as any}
           className="my-5 rounded-xl border border-[#00d4ff]/20 bg-[#00d4ff]/5 px-5 py-4 flex items-start gap-3 relative overflow-hidden group"
           initial={{ opacity: 0, scale: 0.96 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
@@ -372,7 +372,7 @@ function Section({ s, index }: { s: DocSection; index: number }) {
     case "tip":
       return (
         <motion.div
-          ref={ref}
+          ref={ref as any}
           className="my-5 rounded-xl border border-[#00ff88]/20 bg-[#00ff88]/5 px-5 py-4 flex items-start gap-3 relative overflow-hidden group"
           initial={{ opacity: 0, scale: 0.96 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
@@ -400,7 +400,7 @@ function Section({ s, index }: { s: DocSection; index: number }) {
     case "warn":
       return (
         <motion.div
-          ref={ref}
+          ref={ref as any}
           className="my-5 rounded-xl border border-[#ef4444]/20 bg-[#ef4444]/5 px-5 py-4 flex items-start gap-3 relative overflow-hidden group"
           initial={{ opacity: 0, scale: 0.96 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}

@@ -9,8 +9,6 @@ import { OmniLogo } from "@/components/omni-nav"
 
 /* ─────────────────────────────────────────────────────── constants */
 const sp = { type: "spring", stiffness: 340, damping: 26 } as const
-const DEMO_EMAIL = "demo@omni.dev"
-const DEMO_PASS  = "omni2025"
 
 /* ─────────────────────────────────────────────────────── particle canvas */
 function ParticleCanvas() {
@@ -804,13 +802,7 @@ export default function LoginPage() {
                   </div>
                 </motion.div>
 
-                {/* demo hint */}
-                <motion.p
-                  variants={itm}
-                  className="text-center text-[10px] font-mono text-[#1e293b] mt-5"
-                >
-                  Demo: <span className="text-[#334155]">demo@omni.dev</span> / <span className="text-[#334155]">omni2025</span>
-                </motion.p>
+
 
               </motion.div>
             )}

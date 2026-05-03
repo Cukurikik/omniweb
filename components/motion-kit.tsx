@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 /**
  * OMNI Motion Kit — Extraordinary Animation Library

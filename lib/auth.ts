@@ -3,6 +3,7 @@
  * Provides: password hashing (bcrypt), JWT creation/verification,
  * session cookie helpers, and in-memory user store (replace with DB).
  */
+import crypto from "crypto"
 import { cookies } from "next/headers"
 
 /* ── types ──────────────────────────────────────────── */
@@ -79,8 +80,7 @@ export const COOKIE_NAME    = "omni_session"
 export const SESSION_TTL    = 7 * 24 * 60 * 60 * 1000 // 7 days
 
 function sign(payload: string, secret: string): string {
-  // Simple HMAC-like signature for demo. In production use jose or auth.js
-  const sig = Buffer.from(`${payload}:${secret}`).toString("base64").slice(0, 32)
+  const sig = crypto.createHmac("sha256", secret).update(payload).digest("base64url")
   return `${payload}.${sig}`
 }
 
@@ -88,9 +88,16 @@ function verify(token: string, secret: string): string | null {
   const lastDot  = token.lastIndexOf(".")
   if (lastDot < 0) return null
   const payload  = token.slice(0, lastDot)
-  const expected = Buffer.from(`${payload}:${secret}`).toString("base64").slice(0, 32)
+  const expected = crypto.createHmac("sha256", secret).update(payload).digest("base64url")
   const actual   = token.slice(lastDot + 1)
-  if (actual !== expected) return null
+
+  // Use constant-time comparison to prevent timing attacks
+  const expectedBuffer = Buffer.from(expected)
+  const actualBuffer = Buffer.from(actual)
+
+  if (expectedBuffer.length !== actualBuffer.length || !crypto.timingSafeEqual(expectedBuffer, actualBuffer)) {
+    return null
+  }
   return payload
 }
 
@@ -103,7 +110,7 @@ export function createSessionToken(user: User): string {
     issuedAt:  Date.now(),
     expiresAt: Date.now() + SESSION_TTL,
   }
-  const payload = Buffer.from(JSON.stringify(session)).toString("base64")
+  const payload = Buffer.from(JSON.stringify(session)).toString("base64url")
   return sign(payload, SESSION_SECRET)
 }
 
@@ -111,7 +118,7 @@ export function parseSessionToken(token: string): Session | null {
   try {
     const payload = verify(token, SESSION_SECRET)
     if (!payload) return null
-    const session: Session = JSON.parse(Buffer.from(payload, "base64").toString())
+    const session: Session = JSON.parse(Buffer.from(payload, "base64url").toString())
     if (session.expiresAt < Date.now()) return null
     return session
   } catch {

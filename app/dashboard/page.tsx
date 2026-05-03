@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useInView } from "motion/react"

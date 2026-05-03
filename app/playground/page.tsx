@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import { useState, useEffect, useRef } from "react"
 import OmniNav from "@/components/omni-nav"

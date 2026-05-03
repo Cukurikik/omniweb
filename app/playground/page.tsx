@@ -67,20 +67,24 @@ export class Scraper {
         let results = []
 
         while queue.len() > 0 && self.visited.len() < maxPages {
-            let url = queue.shift()
-            if self.visited.contains(url) { continue }
-            self.visited.insert(url)
-
             // Go engine: high throughput concurrent HTTP
-            let resp = await fetch(url)
+            // Fetch up to 5 URLs in parallel, respecting maxPages
+            let remaining = maxPages - self.visited.len()
+            let batchSize = Math.min(5, remaining)
+            let batch = queue.splice(0, batchSize).filter(u => !self.visited.contains(u))
+            batch.forEach(u => self.visited.insert(u))
 
-            // Python engine: structured HTML parsing
-            let soup = html.parse(resp.body)
-            results.push({
-                url,
-                title: soup.title.text,
-                links: soup.find_all("a").map(a => a.href),
-            })
+            let resps = await Promise.all(batch.map(u => fetch(u)))
+
+            for (let i = 0; i < resps.length; i++) {
+                // Python engine: structured HTML parsing
+                let soup = html.parse(resps[i].body)
+                results.push({
+                    url: batch[i],
+                    title: soup.title.text,
+                    links: soup.find_all("a").map(a => a.href),
+                })
+            }
         }
         return Ok(results)
     }
@@ -95,11 +99,11 @@ export class Scraper {
       { t: 1200, text: "[LLVM-Omni] DomainBridge: zero-copy ptr exchange enabled",   color: "#00ff88" },
       { t: 1400, text: "[LLVM-Omni] Build success (Tier 1, 127ms)",                  color: "#00ff88" },
       { t: 1600, text: "",                                                            color: "" },
-      { t: 1700, text: "[Scraper]   Fetching https://example.com ...",               color: "#e2e8f0" },
-      { t: 1900, text: "[Go/HTTP]   200 OK — 3.4 KB (14ms)",                         color: "#00d4ff" },
-      { t: 2100, text: "[Python/BS4] Parsed 41 links, title: 'Example Domain'",      color: "#00d4ff" },
-      { t: 2300, text: "[Runtime]   Scraped 1 page. Queue empty.",                   color: "#e2e8f0" },
-      { t: 2500, text: "[Runtime]   Process exited with code 0",                     color: "#00d4ff" },
+      { t: 1700, text: "[Scraper]   Fetching batch (5 URLs) ...",                    color: "#e2e8f0" },
+      { t: 1800, text: "[Go/HTTP]   200 OK — Parallel fetch (5 sites) in 22ms",      color: "#00d4ff" },
+      { t: 1950, text: "[Python/BS4] Parsed 5 pages, 212 total links",               color: "#00d4ff" },
+      { t: 2100, text: "[Runtime]   Scraped 5 pages. Queue: 207 URLs.",              color: "#e2e8f0" },
+      { t: 2300, text: "[Runtime]   Process exited with code 0",                     color: "#00d4ff" },
     ],
   },
   {
@@ -253,8 +257,11 @@ function Terminal({ lines }: { lines: typeof EXAMPLES[0]["output"] }) {
   )
 }
 
+const HIGHLIGHT_KEYWORDS = ["module","import","export","class","fn","async","await","return","let","const","type","if","while","for","in","from"]
+const KEYWORD_REGEXES = HIGHLIGHT_KEYWORDS.map(kw => new RegExp(`^(${kw})\\b`))
+const STRING_REGEX = /^(["'`]).*?\1/
+
 function CodeArea({ code }: { code: string }) {
-  const keywords = ["module","import","export","class","fn","async","await","return","let","const","type","if","while","for","in","from"]
   const lines = code.split("\n")
   return (
     <div className="h-full overflow-auto p-5 font-mono text-xs leading-6">
@@ -269,15 +276,24 @@ function CodeArea({ code }: { code: string }) {
         let key = 0
         while (rest.length > 0) {
           let matched = false
-          for (const kw of keywords) {
-            const re = new RegExp(`^(${kw})\\b`)
-            const m = rest.match(re)
-            if (m) { parts.push(<span key={key++} className="sh-kw">{m[0]}</span>); rest = rest.slice(m[0].length); matched = true; break }
+          for (let i = 0; i < KEYWORD_REGEXES.length; i++) {
+            const m = rest.match(KEYWORD_REGEXES[i])
+            if (m) {
+              parts.push(<span key={key++} className="sh-kw">{m[0]}</span>)
+              rest = rest.slice(m[0].length)
+              matched = true
+              break
+            }
           }
           if (!matched) {
-            const strM = rest.match(/^(["'`]).*?\1/)
-            if (strM) { parts.push(<span key={key++} className="sh-str">{strM[0]}</span>); rest = rest.slice(strM[0].length) }
-            else { parts.push(<span key={key++} className="sh-var">{rest[0]}</span>); rest = rest.slice(1) }
+            const strM = rest.match(STRING_REGEX)
+            if (strM) {
+              parts.push(<span key={key++} className="sh-str">{strM[0]}</span>)
+              rest = rest.slice(strM[0].length)
+            } else {
+              parts.push(<span key={key++} className="sh-var">{rest[0]}</span>)
+              rest = rest.slice(1)
+            }
           }
         }
         return <div key={li}>{parts}</div>

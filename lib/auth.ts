@@ -28,15 +28,6 @@ export interface Session {
 /* ── in-memory store (replace with DB in production) ── */
 const USERS = new Map<string, User>()
 
-/* Seed demo user */
-USERS.set("demo@omni.dev", {
-  id:           "usr_demo_0001",
-  name:         "Demo Developer",
-  email:        "demo@omni.dev",
-  passwordHash: "omni2025_hashed", // simplified — see note below
-  createdAt:    "2025-01-01T00:00:00Z",
-  plan:         "pro",
-})
 
 export function getUserByEmail(email: string): User | undefined {
   return USERS.get(email.toLowerCase())
@@ -68,7 +59,6 @@ export async function hashPassword(plain: string): Promise<string> {
 
 export async function verifyPassword(plain: string, hash: string): Promise<boolean> {
   // Production: return await bcrypt.compare(plain, hash)
-  if (hash === "omni2025_hashed") return plain === "omni2025" // demo shortcut
   const expected = Buffer.from(plain + ":omni_salt_2025").toString("base64")
   return expected === hash
 }

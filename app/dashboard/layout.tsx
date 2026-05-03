@@ -807,27 +807,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [showLogout,   setShowLogout]   = useState(false)
   const [logoutBusy,   setLogoutBusy]   = useState(false)
 
-  /* Auth bootstrap from localStorage */
+  /* Auth bootstrap via API */
   useEffect(() => {
-    const raw = typeof window !== "undefined" ? localStorage.getItem("omni_user") : null
-    if (raw) {
-      try {
-        setUser(JSON.parse(raw))
+    fetch("/api/auth/me")
+      .then(res => {
+        if (!res.ok) throw new Error("Unauthorized")
+        return res.json()
+      })
+      .then(data => {
+        setUser(data.user)
         setLoading(false)
-      } catch {
-        localStorage.removeItem("omni_user")
-        router.replace("/login")
-        return
-      }
-    } else {
-      router.replace("/login")
-      return
-    }
-
-    fetch("/api/notifications")
-      .then(r => r.ok ? r.json() : null)
+        return fetch("/api/notifications")
+      })
+      .then(r => r ? (r.ok ? r.json() : null) : null)
       .then(d => { if (d) setUnread(d.unread ?? 0) })
-      .catch(() => {})
+      .catch(() => {
+        router.replace("/login")
+      })
   }, [router])
 
   const openLogoutModal  = useCallback(() => setShowLogout(true),  [])
@@ -836,7 +832,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   async function handleLogout() {
     setLogoutBusy(true)
     try {
-      if (typeof window !== "undefined") localStorage.removeItem("omni_user")
       await fetch("/api/auth/logout", { method: "POST" }).catch(() => {})
     } finally {
       setLogoutBusy(false)

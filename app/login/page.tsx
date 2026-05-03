@@ -267,10 +267,6 @@ export default function LoginPage() {
       if (!res.ok) {
         setError(data.error ?? "Sign in failed. Please try again.")
       } else {
-        /* Persist session to localStorage as fallback for the dashboard layout */
-        if (typeof window !== "undefined") {
-          localStorage.setItem("omni_user", JSON.stringify(data.user))
-        }
         setSuccess(true)
         await new Promise(r => setTimeout(r, 900))
         window.location.replace("/dashboard")

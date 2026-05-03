@@ -307,9 +307,7 @@ export default function RegisterPage() {
       if (!res.ok) {
         setError(data.error ?? "Registration failed. Please try again.")
       } else {
-        if (typeof window !== "undefined") {
-          localStorage.setItem("omni_user", JSON.stringify(data.user))
-        }
+
         setSuccess(true)
         await new Promise(r => setTimeout(r, 1200))
         window.location.replace("/dashboard")

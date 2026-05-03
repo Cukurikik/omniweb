@@ -1,27 +1,12 @@
 import { NextResponse } from "next/server"
 import { getSessionFromCookie, getUserById } from "@/lib/auth"
 
-/* Demo user returned when no session cookie is present.
-   In production, remove this fallback and restore the 401 guard. */
-const DEMO_USER = {
-  id:        "usr_demo_0001",
-  name:      "Alex Chen",
-  email:     "alex@omni.dev",
-  plan:      "pro",
-  avatar:    null,
-  createdAt: new Date(Date.now() - 90 * 86_400_000).toISOString(),
-}
 
 export async function GET() {
   const session = await getSessionFromCookie()
 
   if (!session) {
-    /* Return demo user so the dashboard is previewable without auth */
-    return NextResponse.json({
-      user: DEMO_USER,
-      session: { issuedAt: new Date().toISOString(), expiresAt: new Date(Date.now() + 86_400_000).toISOString() },
-      demo: true,
-    })
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 })
   }
 
   const user = getUserById(session.userId)

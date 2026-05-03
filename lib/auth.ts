@@ -1,9 +1,13 @@
 /**
  * OMNI Auth Library
- * Provides: password hashing (bcrypt), JWT creation/verification,
+ * Provides: password hashing (scrypt), JWT creation/verification,
  * session cookie helpers, and in-memory user store (replace with DB).
  */
 import { cookies } from "next/headers"
+import { randomBytes, scrypt, timingSafeEqual } from "crypto"
+import { promisify } from "util"
+
+const scryptAsync = promisify(scrypt)
 
 /* ── types ──────────────────────────────────────────── */
 export interface User {
@@ -33,7 +37,7 @@ USERS.set("demo@omni.dev", {
   id:           "usr_demo_0001",
   name:         "Demo Developer",
   email:        "demo@omni.dev",
-  passwordHash: "omni2025_hashed", // simplified — see note below
+  passwordHash: "51c5fba609f30e6e76161a09804595d2:c86121f1e967a5b3a6e3e5714041b6580979ca6f5af309b441f92e21b2ddcf4df734f664534720937a0ffc6da8cc560e9803153eeff0cf39a3e2182ca315c105",
   createdAt:    "2025-01-01T00:00:00Z",
   plan:         "pro",
 })
@@ -58,19 +62,23 @@ export function getUserById(id: string): User | undefined {
 
 /* ── password ────────────────────────────────────────── */
 /**
- * In production, use bcrypt or argon2.
- * For this demo environment we use a simple hash simulation.
+ * Uses Node's built-in crypto.scrypt for secure password hashing.
  */
 export async function hashPassword(plain: string): Promise<string> {
-  // Production: return await bcrypt.hash(plain, 12)
-  return Buffer.from(plain + ":omni_salt_2025").toString("base64")
+  const salt = randomBytes(16).toString("hex")
+  const buf = (await scryptAsync(plain, salt, 64)) as Buffer
+  return `${salt}:${buf.toString("hex")}`
 }
 
 export async function verifyPassword(plain: string, hash: string): Promise<boolean> {
-  // Production: return await bcrypt.compare(plain, hash)
-  if (hash === "omni2025_hashed") return plain === "omni2025" // demo shortcut
-  const expected = Buffer.from(plain + ":omni_salt_2025").toString("base64")
-  return expected === hash
+  const [salt, key] = hash.split(":")
+  if (!salt || !key) return false
+
+  const keyBuffer = Buffer.from(key, "hex")
+  const derivedKey = (await scryptAsync(plain, salt, 64)) as Buffer
+
+  if (keyBuffer.length !== derivedKey.length) return false
+  return timingSafeEqual(keyBuffer, derivedKey)
 }
 
 /* ── JWT-like session (base64 encoded JSON + HMAC) ───── */

@@ -74,7 +74,10 @@ export async function verifyPassword(plain: string, hash: string): Promise<boole
 }
 
 /* ── JWT-like session (base64 encoded JSON + HMAC) ───── */
-const SESSION_SECRET  = process.env.SESSION_SECRET ?? "omni_dev_secret_2025_change_in_production"
+if (!process.env.SESSION_SECRET) {
+  throw new Error("CRITICAL: SESSION_SECRET environment variable is not set. Authentication cannot be initialized.")
+}
+const SESSION_SECRET  = process.env.SESSION_SECRET
 export const COOKIE_NAME    = "omni_session"
 export const SESSION_TTL    = 7 * 24 * 60 * 60 * 1000 // 7 days
 

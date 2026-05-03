@@ -73,7 +73,7 @@ function StatItem({ v, l, index }: { v: string; l: string; index: number }) {
       className="text-center"
       initial={{ opacity: 0, y: 24, scale: 0.85 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ type: "spring", stiffness: 280, damping: 22, delay: index * 0.1 }}
+      transition={{ type: "spring" as const, stiffness: 280, damping: 22, delay: index * 0.1 }}
     >
       <motion.div
         className="text-3xl font-black text-[#00d4ff] mb-1"
@@ -122,7 +122,7 @@ function VideoCard({ v, index }: { v: typeof VIDEOS[0]; index: number }) {
       onMouseLeave={onLeave}
       initial={{ opacity: 0, y: 32, scale: 0.9 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ type: "spring", stiffness: 260, damping: 22, delay: index * 0.06 }}
+      transition={{ type: "spring" as const, stiffness: 260, damping: 22, delay: index * 0.06 }}
       whileHover={{ scale: 1.03 }}
       className="rounded-2xl border border-white/[0.07] bg-[#0d1117] overflow-hidden group cursor-pointer"
     >
@@ -147,7 +147,7 @@ function VideoCard({ v, index }: { v: typeof VIDEOS[0]; index: number }) {
               flex items-center justify-center"
             whileHover={{ scale: 1.18, backgroundColor: "rgba(0,212,255,0.35)", boxShadow: "0 0 24px rgba(0,212,255,0.5)" }}
             whileTap={{ scale: 0.92 }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            transition={{ type: "spring" as const, stiffness: 400, damping: 20 }}
             aria-label={`Play ${v.title}`}
           >
             <svg className="w-6 h-6 text-[#00d4ff] ml-0.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -245,13 +245,13 @@ function LikeBtn({ initial }: { initial: number }) {
       style={{ color: liked ? "#00d4ff" : "#475569" }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.88 }}
-      transition={{ type: "spring", stiffness: 400, damping: 18 }}
+      transition={{ type: "spring" as const, stiffness: 400, damping: 18 }}
     >
       <motion.svg
         className="w-4 h-4"
         fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"
         animate={{ scale: liked ? [1, 1.4, 1] : 1, rotate: liked ? [0, -15, 0] : 0 }}
-        transition={{ type: "spring", stiffness: 400, damping: 14 }}
+        transition={{ type: "spring" as const, stiffness: 400, damping: 14 }}
         aria-hidden="true"
       >
         <path strokeLinecap="round" strokeLinejoin="round"
@@ -262,7 +262,7 @@ function LikeBtn({ initial }: { initial: number }) {
         className="tabular-nums"
         initial={{ y: liked ? -6 : 6, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 400, damping: 20 }}
+        transition={{ type: "spring" as const, stiffness: 400, damping: 20 }}
       >
         {count}
       </motion.span>
@@ -286,7 +286,7 @@ function ExampleCard({ ex, index, expanded, onToggle }: {
       className="rounded-2xl border border-white/[0.07] bg-[#0d1117] flex flex-col overflow-hidden"
       initial={{ opacity: 0, y: 28, scale: 0.92 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ type: "spring", stiffness: 260, damping: 22, delay: index * 0.055 }}
+      transition={{ type: "spring" as const, stiffness: 260, damping: 22, delay: index * 0.055 }}
       whileHover={{ y: -3, borderColor: `${c}20`, boxShadow: `0 8px 30px ${c}0a` }}
     >
       {/* Code preview */}
@@ -300,7 +300,7 @@ function ExampleCard({ ex, index, expanded, onToggle }: {
                 style={{ background: col }}
                 initial={{ scale: 0 }}
                 animate={inView ? { scale: 1 } : {}}
-                transition={{ delay: index * 0.055 + i * 0.04 + 0.2, type: "spring", stiffness: 400, damping: 18 }}
+                transition={{ delay: index * 0.055 + i * 0.04 + 0.2, type: "spring" as const, stiffness: 400, damping: 18 }}
               />
             ))}
           </div>
@@ -310,7 +310,7 @@ function ExampleCard({ ex, index, expanded, onToggle }: {
           className="px-4 py-3 text-xs font-mono leading-5 text-[#64748b] overflow-hidden"
           style={{ background: "#080b12" }}
           animate={{ maxHeight: expanded ? 360 : 130 }}
-          transition={{ type: "spring", stiffness: 280, damping: 26 }}
+          transition={{ type: "spring" as const, stiffness: 280, damping: 26 }}
         >
           {ex.code}
         </motion.pre>
@@ -385,13 +385,13 @@ function FilterBar({ options, active, onChange, counts }: {
             }}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
-            transition={{ type: "spring", stiffness: 400, damping: 22 }}
+            transition={{ type: "spring" as const, stiffness: 400, damping: 22 }}
           >
             {active === t && (
               <motion.div
                 layoutId="filter-pill"
                 className="absolute inset-0 rounded-lg bg-[#00d4ff]/15"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                transition={{ type: "spring" as const, stiffness: 380, damping: 30 }}
                 aria-hidden="true"
               />
             )}
@@ -430,7 +430,7 @@ export default function CommunityPage() {
   }
   const childV = {
     hidden:  { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 280, damping: 22 } },
+    visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 280, damping: 22 } },
   }
 
   return (
@@ -462,16 +462,16 @@ export default function CommunityPage() {
         <motion.div
           ref={heroRef}
           className="max-w-3xl mx-auto relative"
-          variants={containerV}
+          variants={containerV as any}
           initial="hidden"
           animate={heroInView ? "visible" : "hidden"}
         >
-          <motion.p variants={childV} className="text-xs text-[#00d4ff] font-mono uppercase tracking-widest mb-4">
+          <motion.p variants={childV as any} className="text-xs text-[#00d4ff] font-mono uppercase tracking-widest mb-4">
             Community
           </motion.p>
 
           <motion.h1
-            variants={childV}
+            variants={childV as any}
             className="text-5xl md:text-7xl font-black text-[#e2e8f0] mb-5 leading-[1.05]"
           >
             Learn &amp;{" "}
@@ -485,13 +485,13 @@ export default function CommunityPage() {
             </motion.span>
           </motion.h1>
 
-          <motion.p variants={childV} className="text-[#64748b] text-lg mb-10 leading-relaxed max-w-lg mx-auto">
+          <motion.p variants={childV as any} className="text-[#64748b] text-lg mb-10 leading-relaxed max-w-lg mx-auto">
             Video tutorials, community examples, and real-world code. Everything you need to master OMNI.
           </motion.p>
 
           {/* Section switcher */}
           <motion.div
-            variants={childV}
+            variants={childV as any}
             className="inline-flex bg-white/[0.04] border border-white/[0.08] rounded-xl p-1 gap-1"
           >
             {(["tutorials", "examples"] as const).map(s => (
@@ -507,7 +507,7 @@ export default function CommunityPage() {
                   <motion.div
                     layoutId="section-pill"
                     className="absolute inset-0 rounded-lg bg-[#00d4ff]"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    transition={{ type: "spring" as const, stiffness: 380, damping: 30 }}
                     aria-hidden="true"
                   />
                 )}
@@ -528,7 +528,7 @@ export default function CommunityPage() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -24 }}
-            transition={{ type: "spring", stiffness: 260, damping: 26 }}
+            transition={{ type: "spring" as const, stiffness: 260, damping: 26 }}
           >
             <FilterBar
               options={VIDEO_TOPICS}
@@ -545,7 +545,7 @@ export default function CommunityPage() {
                   initial={{ opacity: 0, x: -16 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-30px 0px" }}
-                  transition={{ type: "spring", stiffness: 280, damping: 24 }}
+                  transition={{ type: "spring" as const, stiffness: 280, damping: 24 }}
                 >
                   <p className="text-xs text-[#00d4ff] font-mono uppercase tracking-widest mb-2">Featured</p>
                   <h2 className="text-2xl font-black text-[#e2e8f0]">Start Here</h2>
@@ -557,7 +557,7 @@ export default function CommunityPage() {
                     initial={{ opacity: 0, x: -24 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                    transition={{ type: "spring" as const, stiffness: 260, damping: 24 }}
                   >
                     <VideoCard v={VIDEOS[0]} index={0} />
                   </motion.div>
@@ -567,14 +567,14 @@ export default function CommunityPage() {
                     initial={{ opacity: 0, x: 24 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                    transition={{ type: "spring" as const, stiffness: 260, damping: 24 }}
                   >
                     {VIDEOS.slice(1, 4).map((v, i) => (
                       <motion.div
                         key={v.id}
                         className="rounded-xl border border-white/[0.07] bg-[#0d1117] overflow-hidden flex gap-3 p-3 group"
                         whileHover={{ x: 4, borderColor: "rgba(0,212,255,0.18)" }}
-                        transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                        transition={{ type: "spring" as const, stiffness: 400, damping: 22 }}
                       >
                         <div className="relative w-28 shrink-0 rounded-lg overflow-hidden" style={{ aspectRatio: "16/9" }}>
                           <motion.img
@@ -649,7 +649,7 @@ export default function CommunityPage() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -24 }}
-            transition={{ type: "spring", stiffness: 260, damping: 26 }}
+            transition={{ type: "spring" as const, stiffness: 260, damping: 26 }}
           >
             <FilterBar
               options={TAGS}
@@ -664,7 +664,7 @@ export default function CommunityPage() {
                   className="mb-8"
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                  transition={{ type: "spring" as const, stiffness: 300, damping: 24 }}
                 >
                   <h2 className="text-xl font-black text-[#e2e8f0]">
                     {activeTag === "All" ? "All Examples" : `${activeTag} Examples`}
@@ -720,7 +720,7 @@ export default function CommunityPage() {
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px 0px" }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
+          transition={{ type: "spring" as const, stiffness: 260, damping: 24 }}
         >
           <h2 className="text-3xl font-black text-[#e2e8f0] mb-4">Share your code</h2>
           <p className="text-[#64748b] text-sm mb-8 leading-relaxed">
@@ -734,7 +734,7 @@ export default function CommunityPage() {
               className="relative flex items-center gap-2 bg-[#00d4ff] text-[#080b12] font-bold px-7 py-3.5 rounded-xl text-sm overflow-hidden"
               whileHover={{ scale: 1.05, boxShadow: "0 0 24px rgba(0,212,255,0.45)" }}
               whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              transition={{ type: "spring" as const, stiffness: 400, damping: 20 }}
             >
               <motion.div
                 className="absolute inset-0 -translate-x-full"
@@ -752,7 +752,7 @@ export default function CommunityPage() {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              transition={{ type: "spring" as const, stiffness: 400, damping: 20 }}
             >
               <Link
                 href="/docs"

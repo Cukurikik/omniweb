@@ -107,7 +107,7 @@ function useTilt(str = 10) {
   const srx = useSpring(rx, { stiffness: 160, damping: 20 })
   const sry = useSpring(ry, { stiffness: 160, damping: 20 })
   const gz  = useTransform(
-    [mx, my] as [typeof mx, typeof my],
+    [mx, my] as any,
     ([lx, ly]: [number, number]) => `radial-gradient(circle at ${(lx + 0.5) * 100}% ${(ly + 0.5) * 100}%, rgba(0,212,255,0.07) 0%, transparent 70%)`
   )
   const move = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -131,7 +131,7 @@ const itm  = {
 /* ─────────────────────────────────────────────────────── social button */
 function SocialBtn({ icon, label, color }: { icon: React.ReactNode; label: string; color?: string }) {
   const mx = useMotionValue(0); const my = useMotionValue(0)
-  const bg = useTransform([mx, my] as [typeof mx, typeof my],
+  const bg = useTransform([mx, my] as any,
     ([lx, ly]: [number, number]) =>
       `radial-gradient(circle at ${(lx + 0.5) * 100}% ${(ly + 0.5) * 100}%, rgba(255,255,255,0.05) 0%, transparent 80%)`)
   return (
@@ -175,7 +175,7 @@ function InputField({
   accentColor?: string; children?: React.ReactNode; error?: boolean
 }) {
   return (
-    <motion.div variants={itm} className="flex flex-col gap-1.5">
+    <motion.div variants={itm as any} className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-xs font-semibold tracking-wider uppercase"
         style={{ color: focused ? accentColor : "#475569" }}>
         {label}
@@ -537,10 +537,10 @@ export default function LoginPage() {
                 </motion.div>
               </motion.div>
             ) : (
-              <motion.div key="form" variants={ctnr} initial="hidden" animate="visible">
+              <motion.div key="form" variants={ctnr as any} initial="hidden" animate="visible">
 
                 {/* back link */}
-                <motion.div variants={itm} className="mb-8">
+                <motion.div variants={itm as any} className="mb-8">
                   <Link href="/" className="inline-flex items-center gap-2 group" aria-label="Back to home">
                     <motion.div
                       className="w-8 h-8 rounded-lg flex items-center justify-center border border-white/[0.07]"
@@ -563,7 +563,7 @@ export default function LoginPage() {
                 </motion.div>
 
                 {/* header */}
-                <motion.div variants={itm} className="mb-7">
+                <motion.div variants={itm as any} className="mb-7">
                   <h1 className="text-[1.75rem] font-black text-[#e2e8f0] mb-1.5 tracking-tight">
                     Sign in
                   </h1>
@@ -577,7 +577,7 @@ export default function LoginPage() {
                 </motion.div>
 
                 {/* social buttons */}
-                <motion.div variants={itm} className="flex flex-col gap-2.5 mb-6">
+                <motion.div variants={itm as any} className="flex flex-col gap-2.5 mb-6">
                   <SocialBtn color="rgba(66,133,244,0.35)"
                     label="Continue with Google"
                     icon={
@@ -610,7 +610,7 @@ export default function LoginPage() {
                 </motion.div>
 
                 {/* divider */}
-                <motion.div variants={itm} className="flex items-center gap-3 mb-6" aria-hidden="true">
+                <motion.div variants={itm as any} className="flex items-center gap-3 mb-6" aria-hidden="true">
                   <div className="flex-1 h-px bg-white/[0.06]" />
                   <span className="text-[#1e293b] text-xs font-mono">or continue with email</span>
                   <div className="flex-1 h-px bg-white/[0.06]" />
@@ -619,7 +619,7 @@ export default function LoginPage() {
                 {/* 3D tilt glassmorphism card */}
                 <motion.div
                   ref={tilt.ref}
-                  variants={itm}
+                  variants={itm as any}
                   onMouseMove={tilt.move}
                   onMouseLeave={tilt.leave}
                   style={{
@@ -806,7 +806,7 @@ export default function LoginPage() {
 
                 {/* demo hint */}
                 <motion.p
-                  variants={itm}
+                  variants={itm as any}
                   className="text-center text-[10px] font-mono text-[#1e293b] mt-5"
                 >
                   Demo: <span className="text-[#334155]">demo@omni.dev</span> / <span className="text-[#334155]">omni2025</span>

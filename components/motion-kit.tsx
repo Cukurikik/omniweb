@@ -91,7 +91,7 @@ export function Reveal({ children, variant = "fadeUp", delay = 0, className, onc
       ref={ref}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      variants={v}
+      variants={v as any}
       transition={{ delay }}
       className={className}
     >
@@ -127,7 +127,7 @@ export function StaggerGrid({ children, className, stagger = 0.08, variant = "st
 
 export function StaggerItem({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div variants={variants.staggerItem} className={className}>
+    <motion.div variants={variants.staggerItem as any} className={className}>
       {children}
     </motion.div>
   )
@@ -176,7 +176,7 @@ export function SplitText({
           custom={i}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          variants={charVariants}
+          variants={charVariants as any}
           className={charClassName}
           style={{ display: "inline-block", whiteSpace: "pre" }}
         >
@@ -408,7 +408,7 @@ export function VelocityMarquee({ items, baseSpeed = 3, className, itemClassName
 
   const x = useMotionValue(0)
   const dirFactor = useRef(1)
-  const rafRef    = useRef<number>()
+  const rafRef    = useRef<number>(0)
 
   useEffect(() => {
     let lastTime: number | null = null
@@ -2218,7 +2218,7 @@ export function DynamicVariantGrid({ items, className }: { items: DynamicVariant
         <motion.div
           key={item.id}
           custom={item}
-          variants={itemVariants}
+          variants={itemVariants as any}
           className="px-4 py-2 rounded-xl text-xs font-semibold font-mono"
           style={{ background: `${item.color}15`, color: item.color, border: `1px solid ${item.color}25` }}
           whileHover={{ scale: 1.1, rotate: 3, transition: { type: "spring", stiffness: 400, damping: 18 } }}
@@ -2443,14 +2443,14 @@ export function OrchestratedStagger({ items, className }: { items: OrchestratedI
     <motion.div
       ref={ref}
       className={`flex flex-wrap gap-3 ${className ?? ""}`}
-      variants={container}
+      variants={container as any}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
     >
       {items.map(i => (
         <motion.div
           key={i.id}
-          variants={item}
+          variants={item as any}
           className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold"
           style={{ background: `${i.color}12`, color: i.color, border: `1px solid ${i.color}22` }}
           whileHover={{
